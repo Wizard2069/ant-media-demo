@@ -1,0 +1,42 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: Ant media order service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8090/auth/realms/demo
+          jwk-set-uri: http://localhost:8090/auth/realms/demo/protocol/openid-connect/certs
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ant_media_orders?useSSL=false
+    username: user
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: update
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    template:
+      default-topic: com.company.orderservice
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: orderservice
+      properties:
+        spring.json.trusted.packages: com.company.demo.messaging
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: wizard201366@gmail.com
+    password: rykxambkpnuwjrsp
+    properties:
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.starttls.enable: true
+      mail.debug: true
+

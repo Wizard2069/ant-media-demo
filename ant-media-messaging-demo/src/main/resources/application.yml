@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: Ant media messaging demo
+  main:
+    web-application-type: reactive
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8090/auth/realms/demo
+          jwk-set-uri: http://localhost:8090/auth/realms/demo/protocol/openid-connect/certs
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/livestream-demo
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    template:
+      default-topic: com.company.orderservice
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+

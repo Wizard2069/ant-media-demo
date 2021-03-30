@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  messaging-service:
+    container_name: messaging-service
+    image: wizard2020abc/ant-media-messaging-service:0.0.8
+    ports:
+      - 8080:8080
+    restart: on-failure
+    environment:
+      SERVER_ERROR_WHITELABEL_ENABLED: "false"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://lemur-2.cloud-iam.com/auth/realms/keycloak-server
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: https://lemur-2.cloud-iam.com/auth/realms/keycloak-server/protocol/openid-connect/certs
+      SPRING_DATA_MONGODB_URI: mongodb+srv://ant-media-user:E2YJCOEmYW4Uyl2i@cluster0.5d3vj.mongodb.net/livestream-demo?retryWrites=true&w=majority
+      SPRING_KAFKA_BOOTSTRAPSERVERS: pkc-ep9mm.us-east-2.aws.confluent.cloud:9092
+      SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL: SASL_SSL
+      SPRING_KAFKA_PROPERTIES_SASL_MECHANISM: PLAIN
+      SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username='MQUKJKSMXYYUB2TB' password='eoQMYsjsF61le/ZMZQ2J/Q4oY1C/yi8tHmDC8sQdWpICxnMRpBUc3j6Zmv7qAC+T';
+
+  order-service:
+    container_name: order-service
+    image: wizard2020abc/ant-media-order-service:0.0.2
+    ports:
+      - 8081:8081
+    restart: on-failure
+    environment:
+      SERVER_ERROR_WHITELABEL_ENABLED: "false"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://lemur-2.cloud-iam.com/auth/realms/keycloak-server
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: https://lemur-2.cloud-iam.com/auth/realms/keycloak-server/protocol/openid-connect/certs
+      SPRING_DATASOURCE_URL: jdbc:mysql://ant-mysql.mysql.database.azure.com:3306/ant_media_orders?useSSL=true&requireSSL=false
+      SPRING_DATASOURCE_USERNAME: user@ant-mysql
+      SPRING_DATASOURCE_PASSWORD: Uk9rwaXQeApQ89hH
+      SPRING_KAFKA_BOOTSTRAPSERVERS: pkc-ep9mm.us-east-2.aws.confluent.cloud:9092
+      SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL: SASL_SSL
+      SPRING_KAFKA_PROPERTIES_SASL_MECHANISM: PLAIN
+      SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username='MQUKJKSMXYYUB2TB' password='eoQMYsjsF61le/ZMZQ2J/Q4oY1C/yi8tHmDC8sQdWpICxnMRpBUc3j6Zmv7qAC+T';
+      SPRING_MAIL_USERNAME: wizard201366@gmail.com
+      SPRING_MAIL_PASSWORD: rykxambkpnuwjrsp
+
+  nginx:
+    container_name: sidecar
+    image: wizard2020abc/ant-services-nginx:0.1.1
+    ports:
+      - 443:443
+    restart: always

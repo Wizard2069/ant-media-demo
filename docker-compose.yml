@@ -1,0 +1,121 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.23
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3307:3306
+    restart: on-failure
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: wJc7pV2A
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak-user
+      MYSQL_PASSWORD: 8LgtvhWv
+
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak:12.0.4
+    command: ["-Djboss.http.port=8090"]
+    ports:
+      - 8090:8090
+    restart: on-failure
+    depends_on:
+      - mysql
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: 48Vv7Z2Z8tbPHtCT
+      DB_USER: keycloak-user
+      DB_PASSWORD: 8LgtvhWv
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.4.4
+    ports:
+      - 27017:27017
+    restart: on-failure
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: M5SCrG2Y
+      MONGO_INITDB_DATABASE: livestream-demo
+
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:6.1.1
+    ports:
+      - 2181:2181
+    restart: on-failure
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      KAFKA_HEAP_OPTS: -Xmx64m
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:6.1.1
+    ports:
+      - 9092:9092
+    restart: on-failure
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_LISTENERS: LC://kafka:29092,LX://kafka:9092
+      KAFKA_ADVERTISED_LISTENERS: LC://kafka:29092,LX://${DOCKER_HOST_IP:-localhost}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LC:PLAINTEXT,LX:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LC
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_HEAP_OPTS: -Xmx192m
+
+  messaging-service:
+    container_name: messaging-service
+    build:
+      context: ./ant-media-messaging-demo
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    restart: on-failure
+    depends_on:
+      - mongo
+      - kafka
+      - keycloak
+    environment:
+      SERVER_ERROR_WHITELABEL_ENABLED: "false"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: http://keycloak:8090/auth/realms/demo
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: http://keycloak:8090/auth/realms/demo/protocol/openid-connect/certs
+      SPRING_DATA_MONGODB_URI: mongodb://root:M5SCrG2Y@mongo:27017/livestream-demo?authSource=admin
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+
+  order-service:
+    container_name: order-service
+    build:
+      context: ./ant-media-order-service
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    restart: on-failure
+    depends_on:
+      - mysql
+      - kafka
+      - keycloak
+    environment:
+      SERVER_ERROR_WHITELABEL_ENABLED: "false"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: http://keycloak:8090/auth/realms/demo
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: http://keycloak:8090/auth/realms/demo/protocol/openid-connect/certs
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ant_media_orders?useSSL=false
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: njBr6uAn
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+
+volumes:
+  mysql-data:
+  mongo-data:
+
+
+
+
