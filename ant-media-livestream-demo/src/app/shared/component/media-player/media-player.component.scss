@@ -1,0 +1,113 @@
+$danger-color: #f93154;
+
+.video-component {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.scrub-bar {
+    @extend .video-component;
+    position: absolute;
+    align-items: center;
+    width: 100%;
+    height: 5px;
+    bottom: 50px;
+    margin: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 400;
+    -webkit-transition: bottom 1s, opacity 0.5s;
+    -khtml-transition: bottom 1s, opacity 0.5s;
+    -moz-transition: bottom 1s, opacity 0.5s;
+    -ms-transition: bottom 1s, opacity 0.5s;
+    transition: bottom 1s, opacity 0.5s;
+    
+    &--current {
+        position: relative;
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+    }
+}
+
+.progress {
+    flex-grow: 1;
+    
+    .slider {
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 15px;
+        background-color: $danger-color;
+        transition: all 0.2s ease-out;
+    }
+}
+
+.live-header {
+    position: absolute;
+    background-color: $danger-color;
+    left: 1rem;
+    top: 1.5rem;
+    font-size: 1.125rem;
+    text-align: center;
+}
+
+.time-display-header {
+    position: absolute;
+    left: 4.125rem;
+    top: 1.5rem;
+    font-size: 1.125rem;
+}
+
+.live-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    
+    span {
+        color: #fff;
+        margin-left: 0.5rem;
+        margin-bottom: 0.125rem;
+    }
+    
+    .fas {
+        color: $danger-color;
+    }
+}
+
+.live-icon {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    color: white;
+    line-height: 50px;
+}
+
+.live-microphone {
+    @extend .live-icon;
+}
+
+.live-share {
+    @extend .live-icon;
+}
+
+.live-stop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

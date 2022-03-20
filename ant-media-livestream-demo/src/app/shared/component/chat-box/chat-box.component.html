@@ -1,0 +1,54 @@
+<div class="title" #title>
+    <h4>Live Chat</h4>
+</div>
+<div class="chat-box"
+     [ngStyle]="chatBoxHeight ? {'height': chatBoxHeight + 'px'} : null"
+     *ngIf="messages.length === 0"
+></div>
+<div 
+    class="chat-box" 
+    [ngStyle]="chatBoxHeight ? {'height': chatBoxHeight + 'px'} : null"
+    *ngIf="messages.length > 0"
+    infiniteScroll
+    [infiniteScrollDistance]="0"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="onScrollDown()"
+    (scrolledUp)="onScrollUp()"
+    [scrollWindow]="false"
+>
+    <div *ngFor="let m of messages; let i = index" class="person-message">
+        <div class="avatar">
+            <img [src]="m.sender.avatar" alt="Avatar">
+        </div>
+        <div class="message">
+            <span class="reply" *ngIf="m.replyTo">Replied to {{m.replyTo.name}}</span>
+            <span class="username">{{m.sender.name}}</span>
+            <span class="content">{{m.msg}}</span>
+        </div>
+        <div class="message-time ms-1">
+            <span class="content">{{toTimeDiff(m.time)}}</span>
+        </div>
+        <div class="reply-to" *ngIf="host" (mouseover)="showIcons[i] = true" (mouseleave)="showIcons[i] = false">
+            <i class="fas fa-reply" *ngIf="showIcons[i]" (click)="onReply(m)"></i>
+        </div>
+    </div>
+</div>
+<div class="message-input" #messageInput>
+    <span
+        id="msg" 
+        class="input ms-1" 
+        role="textbox" 
+        contenteditable 
+        (input)="onChange($event)"
+        (focusin)="submitting = true"
+        (focusout)="submitting = false"
+        (keydown.enter)="$event.preventDefault();onSubmit()"
+    ></span>
+    <div 
+        class="send-btn" 
+        (click)="onSubmit()" 
+        [ngStyle]="!submitting ? {'color': '#888'} : null"
+    >
+        <i class="fas fa-paper-plane fa-lg"></i>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+@import "./variables.scss";
+
+.video-stream {
+    display: inline-table;
+}
+
+.chat-box-wrapper {
+    flex-grow: 1;
+}
+
+@function calc-height($width) {
+    @return $width / $stable-video-rate;
+}
+
+@mixin set-width-height($width, $height) {
+    .video-stream {
+        width: $width + $padding-x;
+        height: $height;
+    }
+
+    .chat-box-wrapper {
+        width: calc(100% - #{$width} - #{$padding-x});
+        height: $height;
+    }
+}
+
+@include media(">xl") {
+    $width: 960px;
+    $height: calc-height($width);
+
+    @include set-width-height($width, $height);
+}
+
+@include media(">lg", "<=xl") {
+    $width: 640px;
+    $height: calc-height($width);
+
+    @include set-width-height($width, $height);
+}
+

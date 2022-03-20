@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-sm-6 offset-sm-3 col-md-4 offset-md-4 my-3">
+        <mdb-form-control>
+            <input 
+                mdbInput 
+                type="text" 
+                id="form1" 
+                class="form-control" 
+                [(ngModel)]="streamId"
+                [disabled]="startStream"
+            />
+            <label mdbLabel class="form-label" for="form1">Stream name</label>
+        </mdb-form-control>
+    </div>
+</div>
+<div class="row">
+    <div class="d-grid gap-2 col-md-4 offset-md-4 col-sm-6 offset-sm-3 text-center d-md-block">
+        <button
+            type="button"
+            class="btn btn-danger"
+            (click)="onStartStream()"
+            [disabled]="startStream"
+        >Start stream</button>
+        <button
+            type="button"
+            class="btn btn-danger mt-md-2 ms-md-2"
+            (click)="onChangeMode()"
+            [disabled]="startStream"
+        >Switch to desktop capture</button>
+    </div>
+</div>
+<div class="row my-3">
+    <div class="col-lg-8 ps-lg-0 video-stream">
+        <app-media-player
+            videoId="localVideo"
+            (mute)="onMute($event)"
+            [start]="startStream"
+            (stopStream)="onStopStream()"
+        ></app-media-player>
+    </div>
+    <div class="col-lg-4 mt-3 mt-lg-0 px-lg-0 chat-box-wrapper">
+        <app-chat-box
+            [host]="true"
+            [webRTCAdaptor]="webRTCAdaptor"
+            [streamId]="streamId"
+            [messageData]="data"
+        ></app-chat-box>
+    </div>
+</div>

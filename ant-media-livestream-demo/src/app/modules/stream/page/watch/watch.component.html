@@ -1,0 +1,23 @@
+<div class="container-fluid mt-3">
+    <div>Total livestreams: {{totalStreams}}</div>
+    <div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Stream</th>
+                    <th scope="col">Number of viewer</th>
+                    <th scope="col">Start time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let stream of activeStreams">
+                    <th scope="row" [routerLink]="['/stream/watch', stream.streamId]">
+                        {{stream.streamId.split('-')[0]}}
+                    </th>
+                    <td><i class="fas fa-eye"></i><span style="margin-left: 5px">{{stream.webRTCViewerCount}}</span></td>
+                    <td>{{stream.startTime | date:'medium'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

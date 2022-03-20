@@ -1,0 +1,11 @@
+.table {
+    *:focus {
+        outline: none;
+    }
+    
+    tbody {
+        :hover {
+            cursor: pointer;
+        }
+    }
+}

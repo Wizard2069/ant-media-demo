@@ -1,0 +1,139 @@
+@import "./src/assets/scss/variables.scss";
+
+.general-message {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+    font-size: 15px;
+
+    .avatar {
+        display: flex;
+        align-items: center;
+        
+        img {
+            max-width: 35px;
+            width: 100%;
+            border-radius: 50%;
+        }
+    }
+
+    .message {
+        border: 1px solid #dedede;
+        margin-left: 0.5rem;
+        border-radius: 15px;
+        padding: 4px 9px 5px;
+        background-color: #e4e6eb;
+        max-width: calc((100% - 25px) * 2 / 3);
+        
+        .username {
+            font-size: 0.75rem;
+            display: block;
+            font-weight: bold;
+        }
+        
+        .content {
+            color: #050505;
+            word-break: break-word;
+        }
+        
+        .reply {
+            display: block;
+            font-size: 0.725rem;
+        }
+    }
+    
+    .message-time {
+        display: flex;
+        align-items: center;
+        
+        .content {
+            color: gray;
+        }
+    }
+    
+    .reply-to {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        cursor: pointer;
+        flex-grow: 1;
+    }
+}
+
+.title {
+    border: 2px solid $danger-color;
+    font-weight: bold;
+    padding: 10px;
+    background-color: $danger-color;
+
+    h4 {
+        color: #fff;
+    }
+}
+
+.chat-box {
+    border: 2px solid #dedede;
+    border-top: none;
+    border-bottom: none;
+    padding: 15px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #fff;
+
+    .person-message {
+        @extend .general-message;
+    }
+}
+
+.message-input {
+    display: flex;
+    border: 2px solid #dedede;
+    padding: 15px 10px;
+    justify-content: space-between;
+    background-color: #fff;
+
+    .input {
+        width: 90%;
+        border-bottom: 2px solid #fff;
+        cursor: text;
+        max-height: 100px;
+        overflow-y: auto;
+
+        &[contenteditable]:empty::before {
+            content: "Type your message...";
+            color: gray;
+        }
+
+        &:focus {
+            outline: none!important;
+            border-bottom: 2px solid $danger-color;
+        }
+    }
+
+    .send-btn {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        i {
+            align-items: center;
+        }
+    }
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+    
+    &:hover {
+        background: #555;
+    }
+}

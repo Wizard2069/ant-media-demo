@@ -1,0 +1,17 @@
+// include media
+@import "~include-media/dist/include-media.scss";
+
+$danger-color: #f93154;
+
+$breakpoints: (
+    xs: 0px,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1400px
+);
+
+$stable-video-rate: 4 / 3; // (width / height)
+
+$padding-x: 12px;

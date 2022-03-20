@@ -1,0 +1,75 @@
+<vg-player (onPlayerReady)="onPlayerReady($event)">
+    <div class="live-header badge" *ngIf="!playMode">
+        <span>Live</span>
+    </div>
+    
+    <vg-time-display
+        vgProperty="current"
+        vgFormat="mm:ss"
+        class="badge time-display-header"
+        *ngIf="!playMode"
+    ></vg-time-display>
+    
+    <vg-overlay-play *ngIf="playMode" (click)="onClickPlayPause()"></vg-overlay-play>
+    
+    <vg-controls [vgAutohide]="true" [vgAutohideTime]="5" *ngIf="playMode">
+        <div class="scrub-bar" *ngIf="playMode">
+            <div class="scrub-bar--current">
+                <div class="progress">
+                    <div
+                        class="progress-bar bg-danger"
+                        role="progressbar"
+                        [ngStyle]="{'width': currentTime + '%'}"
+                        [attr.aria-valuenow]="currentTime"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        (mouseenter)="showSlider = true"
+                        (mouseleave)="showSlider = false"
+                    ></div>
+                    <div
+                        *ngIf="showSlider"
+                        class="slider"
+                        [ngStyle]="{'left': currentTime - 1 + '%'}"
+                    ></div>
+                </div>
+            </div>
+        </div>
+        
+        <vg-play-pause *ngIf="playMode" (click)="onClickPlayPause()"></vg-play-pause>
+        
+        <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+        
+        <div class="live-control ms-2">
+            <i class="fas fa-circle fa-sm"></i>
+            <span>Live</span>
+        </div>
+        <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
+        
+        <vg-mute></vg-mute>
+        <vg-volume></vg-volume>
+        
+        <vg-fullscreen></vg-fullscreen>
+    </vg-controls>
+    
+    <vg-controls *ngIf="!playMode" style="justify-content: center">
+        <div class="live-microphone">
+            <i class="fas fa-microphone fa-lg" *ngIf="!isMute" (click)="onClickMute()"></i>
+            <i class="fas fa-microphone-slash fa-lg" *ngIf="isMute" (click)="onClickUnmute()"></i>
+        </div>
+        <div class="live-share">
+            <i class="fas fa-share"></i>
+        </div>
+        <div class="live-stop">
+            <button
+                class="btn btn-danger"
+                (click)="onClickStopStream()"
+                [disabled]="!start"
+            >Stop Stream
+            </button>
+        </div>
+    </vg-controls>
+    
+    <video [vgMedia]="media" #media [id]="videoId" preload="auto" autoplay>
+    </video>
+</vg-player>
+
